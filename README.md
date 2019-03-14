@@ -20,3 +20,7 @@ d:/custom/receive d:/custom/done d:/logs/
 ###第四步骤
 打开浏览器，访问如下地址，检查待签名数据并加签处理。
 http://localhost:8888/Custom/sign
+
+###整体流程
+![Image text](https://github.com/martinyuan/custom-sign/blob/master/%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg)
+
