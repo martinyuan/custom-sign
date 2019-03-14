@@ -1,0 +1,1 @@
+start C:/develop/jdk1.8.0_181/bin/java -jar wl-custom-sign-0.0.1.jar --spring.profiles.active=online,inst02

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	
+	<!-- 日志格式 -->
+	<property name="PATTERN" value="%d{yyyy-MM-dd HH\:mm\:ss} [%c] :%L-[%p] %m%n" />
+
+	<!-- 控制台日志输出：全部日志级别 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 每日分割日志输出：INFO日志级别以上的，包含INFO，WARN，ERROR -->
+	<appender name="FILE_LEVEL_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<file>${LOG_PATH}/${LOG_FILE}.all.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE}.all.log.%d{yyyyMMdd}</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+	
+	<!-- 每日分割日志输出：只包含ERROR级别日志 -->
+	<appender name="FILE_LEVEL_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<file>${LOG_PATH}/${LOG_FILE}.err.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE}.err.log.%d{yyyyMMdd}</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+			<charset>utf8</charset>
+		</encoder>
+	</appender>
+	
+	<root>
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE_LEVEL_INFO" />
+		<appender-ref ref="FILE_LEVEL_ERROR" />
+	</root>
+	
+</configuration>  

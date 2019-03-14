@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>数据加签</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script th:src="@{/javascript/jquery-1.12.4.min.js}"></script>
+	<script th:src="@{/javascript/json2.js}"></script>
+	<script th:src="@{/javascript/client.js}"></script>
+</head>
+<body>
+	<script th:inline="javascript">
+		var password = [[${password}]];
+		var json = [[${json}]];
+		var signStr = [[${signStr}]];
+		
+		$(document).ready(function(){
+			sign();
+			setTimeout(function(){location.reload()},8000); //指定8秒刷新一次
+		}); 
+		
+		function sign(){
+			var myDate = new Date();
+			$("#result").html("running. at:["+ myDate.getTime() +"]");
+			if(signStr){//如果有需要加签数据执行加签，并提交自动报关系统
+				EportClient.isInstalledTest(EportClient.cusSpcSignDataAsPEM,signStr,password,function(msg, msgJson){
+					commonCallback(msg,msgJson,"Textarea2");
+				});
+			}
+		}
+		
+		function commonCallback(msg,msgJson,eleID){
+			if(msg.Result){
+				var sign = msg.Data[0];
+				var cerno = msg.Data[1];
+				
+				
+				var request = $.ajax({
+					  url: "/Custom/post",
+					  method: "POST",
+					  contentType: "application/json; charset=utf-8",
+					  data: JSON.stringify({"json":json,"cerno":cerno,"sign":sign}),
+					  dataType: "text"
+					});
+					 
+					request.done(function( result ) {
+						if (result) {
+			            	var myDate = new Date();
+			            	console.info("success.");
+							$("#result").html("running. result:["+result+"] at:["+ myDate.getTime() +"]");
+			            }
+					});
+					 
+					request.fail(function( jqXHR, textStatus ) {
+						console.info("error. textStatus:"+textStatus);
+			            $("#result").html("提交数据失败！");
+					});
+					
+			}
+		}
+	</script>
+	<div id="result"></div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: 'custom-sign'
+  profiles:
+    active: local
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+    cache: false
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths:
+          - /**
+logging:
+  config: classpath:logback-spring.xml
+  file: '${spring.application.name}'
+  
+---
+spring:
+  profiles: local
+app:
+  conf:
+    customs:
+      sign-password: '' #TODO 替换自己的证书密码
+      receive-path: d:/custom/receive
+      done-path: d:/custom/done
+      post-url: '' #TODO 替换自己业务系统接口
+logging:
+  path: 'd:/logs/${spring.application.name}/'
+  level:
+    root: INFO
